@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Anton", "Arial Black", sans-serif;
+  --font-body: "Archivo", system-ui, sans-serif;
+  --font-mono2: "JetBrains Mono", ui-monospace, monospace;
+  --font-jp: "Noto Sans JP", sans-serif;
+
+  --color-paper: #ece0bd;
+  --color-paper-deep: #ddc795;
+  --color-ink: #16100a;
+  --color-blood: #b3121f;
+  --color-blood-deep: #7d0b14;
+  --color-sea: #0c141c;
+  --color-sea-deep: #070d13;
+  --color-gold: #d9a441;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-sea-deep);
+  color: #f3ead2;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-blood);
+  color: #fff;
+}
+
+/* ---------- paper grain (wanted posters) ---------- */
+.paper-grain {
+  position: relative;
+}
+.paper-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.28 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* ---------- halftone dots ---------- */
+.halftone {
+  background-image: radial-gradient(rgba(22, 16, 10, 0.16) 1.1px, transparent 1.1px);
+  background-size: 9px 9px;
+}
+
+/* ---------- duotone portrait treatment ---------- */
+.poster-img {
+  filter: sepia(0.42) contrast(1.06) brightness(0.98) saturate(1.05);
+}
+
+/* ---------- keyframes ---------- */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee-x 28s linear infinite;
+}
+.animate-marquee-fast {
+  animation: marquee-x 16s linear infinite;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+.animate-drift {
+  animation: drift 7s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 24s linear infinite;
+}
+
+/* ---------- scroll reveals (GSAP sets initial state; visible without JS) ---------- */
+.reveal {
+  /* marker class — animated by GSAP ScrollTrigger.batch */
+}
+
+/* wanted poster hover */
+.poster-card {
+  transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s var(--ease-out-expo);
+}
+.poster-card:hover {
+  transform: translateY(-10px) rotate(-1.2deg);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.65);
+}
+.poster-card:hover .poster-img {
+  filter: sepia(0.15) contrast(1.1) brightness(1.02);
+  transform: scale(1.04);
+}
+.poster-img {
+  transition: transform 0.7s var(--ease-out-expo), filter 0.5s ease;
+}
+
+/* vertical japanese */
+.vertical-jp {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* hard rules */
+.rule-blood {
+  background: var(--color-blood);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-fast,
+  .animate-drift,
+  .animate-spin-slow {
+    animation: none;
+  }
+  .reveal {
+    /* marker class — animated by GSAP ScrollTrigger.batch */
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
